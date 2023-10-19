@@ -6,7 +6,7 @@
 #    By: wmillett <wmillett@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/08 08:48:00 by wmillett          #+#    #+#              #
-#    Updated: 2023/10/19 14:20:56 by wmillett         ###   ########.fr        #
+#    Updated: 2023/10/19 14:54:25 by wmillett         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME = philo
 LIBFT = libft
 #Command variables ------------------------
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address #-fsanitize=thread #-O3
+CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=address #-fsanitize=thread #-O3
 MK = mkdir -p
 RM = rm -rf
 #Sources directories ----------------------
