@@ -6,7 +6,7 @@
 /*   By: wmillett <wmillett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 17:53:07 by wmillett          #+#    #+#             */
-/*   Updated: 2023/10/19 13:59:40 by wmillett         ###   ########.fr       */
+/*   Updated: 2023/10/19 14:51:23 by wmillett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,16 @@ static int	init_action(void)
 	{
 		if (pthread_mutex_init(&data()->philos[i++].action_lock, NULL))
 			return (ERROR);
-		data()->mutex_flag += 1;
+		data()->mflag_action += 1;
 	}
 	i = 0;
 	while (i < data()->nb_philos)
 	{
 		if (pthread_mutex_init(&data()->philos[i++].meal_lock, NULL))
 			return (ERROR);
-		data()->mutex_flag += 1;
+		data()->mflag_meal += 1;
 	}
 	i = 0;
-	while (i < data()->nb_philos)
-	{
-		if (pthread_mutex_init(&data()->philos[i++].last_lock, NULL))
-			return (ERROR);
-		data()->mutex_flag += 1;
-	}
 	return (FINISH);
 }
 
@@ -77,7 +71,7 @@ static int	philo_mutex(t_param *params)
 	{
 		if (pthread_mutex_init(&data()->philos[i].own.fork, NULL))
 			return (ERROR);
-		data()->mutex_flag += 1;
+		data()->mflag_fork += 1;
 		data()->philos[i].write_lock = &data()->write_lock;
 		data()->philos[i].dead_lock = &data()->dead_lock;
 		i++;
@@ -90,18 +84,20 @@ static int	philo_mutex(t_param *params)
 
 int	init_mutex(t_param *params)
 {
+	data()->mflag_action = 0;
+	data()->mflag_meal = 0;
+	data()->mflag_fork = 0;
+	data()->mflag_data = 0;
 	if (pthread_mutex_init(&data()->dead_lock, NULL))
 		return (printerror(MUTEX_ERR));
-	data()->mutex_flag += 1;
+	data()->mflag_data += 1;
+	data()->mflag = TRUE;
 	if (pthread_mutex_init(&data()->write_lock, NULL))
 		return (printerror(MUTEX_ERR));
-	data()->mutex_flag += 1;
+	data()->mflag_data += 1;
 	if (pthread_mutex_init(&data()->start_lock, NULL))
 		return (printerror(MUTEX_ERR));
-	data()->mutex_flag += 1;
-	if (pthread_mutex_init(&data()->last_lock, NULL))
-		return (printerror(MUTEX_ERR));
-	data()->mutex_flag += 1;
+	data()->mflag_data += 1;
 	if (philo_mutex(params) == ERROR)
 		return (printerror(MUTEX_ERR));
 	return (TRUE);

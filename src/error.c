@@ -6,7 +6,7 @@
 /*   By: wmillett <wmillett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:41:07 by wmillett          #+#    #+#             */
-/*   Updated: 2023/10/19 14:03:04 by wmillett         ###   ########.fr       */
+/*   Updated: 2023/10/19 14:49:34 by wmillett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,47 +20,39 @@ int	printerror(char *str)
 
 static void	sub_destroy_mutex(void)
 {
-	while (data()->mutex_flag > 4 + (data()->nb_philos * 3))
+	while (data()->mflag_meal)
 	{
-		pthread_mutex_destroy(&data()->philos[data()->mutex_flag - (4
-				+ (data()->nb_philos * 2))].last_lock);
-		data()->mutex_flag -= 1;
+		pthread_mutex_destroy(&data()->philos[data()->mflag_meal
+			- 1].meal_lock);
+		data()->mflag_meal--;
 	}
-	while (data()->mutex_flag > 4 + (data()->nb_philos * 2))
+	while (data()->mflag_action)
 	{
-		pthread_mutex_destroy(&data()->philos[data()->mutex_flag - (4
-				+ (data()->nb_philos * 2))].meal_lock);
-		data()->mutex_flag -= 1;
+		pthread_mutex_destroy(&data()->philos[data()->mflag_action
+			- 1].action_lock);
+		data()->mflag_action--;
 	}
-	while (data()->mutex_flag > 4 + data()->nb_philos)
+	while (data()->mflag_fork)
 	{
-		pthread_mutex_destroy(&data()->philos[data()->mutex_flag - (4
-				+ data()->nb_philos)].action_lock);
-		data()->mutex_flag -= 1;
+		pthread_mutex_destroy(&data()->philos[data()->mflag_fork - 1].own.fork);
+		data()->mflag_fork--;
 	}
 }
 
 void	destroy_mutex(void)
 {
 	sub_destroy_mutex();
-	while (data()->mutex_flag > 4)
-	{
-		pthread_mutex_destroy(&data()->philos[data()->mutex_flag - 4].own.fork);
-		data()->mutex_flag -= 1;
-	}
-	if (data()->mutex_flag == 4)
-		pthread_mutex_destroy(&data()->last_lock);
-	if (data()->mutex_flag >= 3)
+	if (data()->mflag_data == 3)
 		pthread_mutex_destroy(&data()->start_lock);
-	if (data()->mutex_flag >= 2)
+	if (data()->mflag_data >= 2)
 		pthread_mutex_destroy(&data()->write_lock);
-	if (data()->mutex_flag >= 1)
+	if (data()->mflag_data >= 1)
 		pthread_mutex_destroy(&data()->dead_lock);
 }
 
 int	escape(void *a, void *b, void *c, char *err_msg)
 {
-	if (data()->mutex_flag)
+	if (data()->mflag)
 		destroy_mutex();
 	free(a);
 	free(b);
@@ -78,7 +70,7 @@ int	leave(void *a, void *b, void *c, uint64_t time)
 	printf("\033[1;32mEnd of simulation: %llums\033[0m\n", current - time);
 	printf("\033[1;32mAverage number of meals eaten: %d\033[0m\n",
 		data()->to_eat - data()->philos[0].nb_to_eat);
-	if (data()->mutex_flag)
+	if (data()->mflag)
 		destroy_mutex();
 	free(a);
 	free(b);

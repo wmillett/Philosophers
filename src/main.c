@@ -6,7 +6,7 @@
 /*   By: wmillett <wmillett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:06:30 by wmillett          #+#    #+#             */
-/*   Updated: 2023/10/19 14:04:25 by wmillett         ###   ########.fr       */
+/*   Updated: 2023/10/19 14:47:41 by wmillett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	main(int argc, char **argv)
 	if (check_malloc(params, NULL, NULL, 1) == ERROR)
 		return (ERROR);
 	set_param(params, argc, argv);
-	data()->mutex_flag = 0;
+	data()->mflag = FALSE;
 	if (set_philo(params) == ERROR)
 		return (escape(params, NULL, NULL, NULL));
 	return (leave(params, NULL, NULL, data()->philos[0].start_time));

@@ -6,7 +6,7 @@
 /*   By: wmillett <wmillett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 16:06:52 by wmillett          #+#    #+#             */
-/*   Updated: 2023/10/19 13:59:30 by wmillett         ###   ########.fr       */
+/*   Updated: 2023/10/19 14:44:06 by wmillett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,11 @@ typedef struct s_program
 	uint64_t		time_to_sleep;
 	int				nb_philos;
 	int				to_eat;
-	int				mutex_flag;
+	bool			mflag;
+	int				mflag_data;
+	int				mflag_fork;
+	int				mflag_action;
+	int				mflag_meal;
 	pthread_t		reaper_thread;
 	bool			dead_flag;
 	int				start_flag;
